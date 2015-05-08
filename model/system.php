@@ -2,14 +2,14 @@
 session_start();
 class systemFunctions{
 
-	function register($newUser,$newPwd){
+	function register($newUser,$newPwd,$ime,$prezime){
 		include '../dbSettings.php';
 
 		$saltKey=sha1("eqweo/32or23+/4eo32ed23/dl/2+dl/2+3eo_*?*?=");
 		$hash=$saltKey.$newPwd;
 		$newPass=hash('sha512',$hash,false);
 
-		$sql='insert into gradjani(email,password) values("'.$newUser.'","'.$newPass.'")';
+		$sql='insert into gradjani(email,password,ime,prezime) values("'.mysql_real_escape_string($newUser).'","'.mysql_real_escape_string($newPass).'","'.mysql_real_escape_string($ime).'","'.mysql_real_escape_string($prezime).'")';
 		if(mysql_query($sql)){
 			echo 1;
 		}else{
@@ -48,6 +48,10 @@ class systemFunctions{
 
 	}
 
+	function logout(){
+
+		session_destroy();
+	}
 
 
 //end of class

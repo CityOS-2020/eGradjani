@@ -35,12 +35,25 @@ session_start();
       <?php
       if($_SESSION["status"]==1){
         include 'dbSettings.php';
-        $sqlGradjanin='select email from gradjani where idGradjani='.$_SESSION["id"];
+        $sqlGradjanin='select email,ime,prezime from gradjani where idGradjani='.$_SESSION["id"];
         $resultGradjanin=mysql_query($sqlGradjanin);
         $rowGradjanin=mysql_fetch_array($resultGradjanin);
         
         ?>
-        <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link" onClick="loadForm('profile');"><?php echo $rowGradjanin["email"];?></a></p>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="dropdown active">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ><?php echo $rowGradjanin["ime"].' '.$rowGradjanin["prezime"];?> <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="#" onClick="loadScreen('profile',0);">Profil</a></li>
+                <li><a href="#" onClick="logout();">Odjavi se</a></li>
+               
+                
+              </ul>
+            </li>
+          </ul>
+        
         <?php
       }else{
         ?>
@@ -63,16 +76,10 @@ session_start();
 </nav>
 <div id="main" class="container-fluid" style="padding-top:150px;">
 <div class="row">
-<div id="content" class="col-md-10">
+<div id="content" class="col-md-12">
 <!--start content -->
-<div class="col-md-4">
-</div>
-<div class="col-md-4">
 
 
-</div>
-<div class="col-md-4">
-</div>
 <!-- end of content -->
 </div>
 <!-- Modal za novi izlet -->
@@ -90,7 +97,13 @@ session_start();
                </div>  
                 <div class="form-group">
                     <input type="password" class="form-control" id="regPwd" name="regPwd" placeholder="Lozinka">
-               </div>  
+               </div>
+               <div class="form-group">
+                    <input type="text" class="form-control" id="regIme" name="regIme" placeholder="Ime">
+               </div>
+               <div class="form-group">
+                    <input type="text" class="form-control" id="regPrezime" name="regPrezime" placeholder="Ime">
+               </div>    
         </form>
       </div>
       <div class="modal-footer">
