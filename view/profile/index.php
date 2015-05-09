@@ -78,11 +78,20 @@ include '../../dbSettings.php';
                   $sqlPrijedlozi='select * from prijedlozi where idGradjanin='.$_SESSION["id"].' and aktivan=1';
                   $resultPrijedlozi=mysql_query($sqlPrijedlozi);
             while($rowPrijedlozi=mysql_fetch_array($resultPrijedlozi)){
+                                $sqlVotes='select SUM(upVote) as up,SUM(downVote) as down from prijedloziVotes where idPrijedloga='.$rowPrijedlozi["idPrijedloga"];
+                                
+                                $resultVotes=mysql_query($sqlVotes);
+                                $rowVotes=mysql_fetch_array($resultVotes);
               ?>
                               <tr>
                                 <td><?php echo $rowPrijedlozi["naslov"];?></td>
                                 <td><?php echo $rowPrijedlozi["opis"];?></td>
-                                <td><?php echo ""?></td>
+                                <td>
+                                               
+                          <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><?php echo $rowVotes["up"];?>
+                          <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><?php echo $rowVotes["down"];?>      
+
+                                </td>
                                 <td>
                                 <?php if($rowPrijedlozi["aktivan"]==1){?>
                                 <a href="#" onClick="profile(2,<?php echo $rowPrijedlozi["idPrijedloga"];?>);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>Deaktiviraj</a><br/> 
@@ -97,6 +106,110 @@ include '../../dbSettings.php';
                 </tbody>  
       </table>
             </div>
+
+         <div role="tabpanel" class="tab-pane " id="problemi" style="padding:20px">
+              <div class="row">
+                <div class="col-md-12">
+                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noviProblemModal">Novi problem</button>
+                  </div>
+              </div>
+          <table class="table table-striped" id="neaktvniAgenti" style="padding-top:20px;">
+          <thead>
+                  <tr><td>Naslov</td><td>Opis</td><td>Slika</td><td>Status</td><td>Radnje</td></tr>
+                </thead>
+                <tbody>
+                 <?php
+                 $sqlProblemi='select * from problemi where aktivan=1 and idGradjanina='.$_SESSION["id"];
+                 $resultProblemi=mysql_query($sqlProblemi);
+                
+                 while($rowProblemi=mysql_fetch_array($resultProblemi)){
+                  ?>
+                    <tr><td><?php echo $rowProblemi["naslov"];?></td>
+                        <td><?php echo $rowProblemi["opis"];?></td>
+                        <td><img height="150" width="150" src="<?php echo $rowProblemi["slika"];?>" /></td>
+                        <td>
+                        <?php
+                        if($rowProblemi["status"]==1){
+                          echo 'Novi';
+                        }else if($rowProblemi["status"]==2){
+                          echo 'Zaprimljen';
+                        }else if($rowProblemi["status"]==3){
+                          echo 'Rješeno';                
+                        }
+                        ?>
+                        </td>
+                        <td><?php if($rowProblemi["aktivan"]==1){?>
+                                <a href="#" onClick="profile(3,<?php echo $rowProblemi["idProblema"];?>);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>Deaktiviraj</a><br/> 
+                                <?php }
+                                ?>
+                        </td>
+                       </tr> 
+
+                  <?php
+                 }
+                 ?>
+                </tbody>  
+      </table>
+            </div>
+
+<div role="tabpanel" class="tab-pane " id="zahtjevi" style="padding:20px">
+              <div class="row">
+                <div class="col-md-12">
+                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noviProblemModal">Novi problem</button><!-- Single button -->
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            Action <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Besplatni WiFi</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                          </ul>
+                        </div>
+                  </div>
+              </div>
+          <table class="table table-striped" id="neaktvniAgenti" style="padding-top:20px;">
+          <thead>
+                  <tr><td>Naslov</td><td>Opis</td><td>Slika</td><td>Status</td><td>Radnje</td></tr>
+                </thead>
+                <tbody>
+                 <?php
+                 $sqlProblemi='select * from problemi where aktivan=1 and idGradjanina='.$_SESSION["id"];
+                 $resultProblemi=mysql_query($sqlProblemi);
+                
+                 while($rowProblemi=mysql_fetch_array($resultProblemi)){
+                  ?>
+                    <tr><td><?php echo $rowProblemi["naslov"];?></td>
+                        <td><?php echo $rowProblemi["opis"];?></td>
+                        <td><img height="150" width="150" src="<?php echo $rowProblemi["slika"];?>" /></td>
+                        <td>
+                        <?php
+                        if($rowProblemi["status"]==1){
+                          echo 'Novi';
+                        }else if($rowProblemi["status"]==2){
+                          echo 'Zaprimljen';
+                        }else if($rowProblemi["status"]==3){
+                          echo 'Rješeno';                
+                        }
+                        ?>
+                        </td>
+                        <td><?php if($rowProblemi["aktivan"]==1){?>
+                                <a href="#" onClick="profile(3,<?php echo $rowProblemi["idProblema"];?>);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>Deaktiviraj</a><br/> 
+                                <?php }
+                                ?>
+                        </td>
+                       </tr> 
+
+                  <?php
+                 }
+                 ?>
+                </tbody>  
+      </table>
+            </div>
+
+
             </div>
 
 </div>
@@ -147,3 +260,57 @@ $('#myTab a').click(function (e) {
 </div>
 
 <!--gotov modal za novi prijedlog -->
+
+<!-- modal za novi problem -->
+<!-- Modal -->
+<div class="modal fade" id="noviProblemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Novi Problem</h4>
+      </div>
+      <div class="modal-body">
+         <form role="form" id="noviProblem">
+       <div class="form-group">
+             <label for="naslov">Naslov</label>
+             <input type="text" class="form-control" id="naslov" name="naslov" placeholder="Naslov..." >
+       </div>
+       <div class="form-group">
+             <label for="opis">Opis</label>
+             <textarea class="form-control" id="opis" name="opis" placeholder="Opis..." ></textarea>
+       </div>
+        
+        <div class="form-group">
+        <input id="slika" name="slika" type="file" >
+        </div>
+        <script>
+    
+    $("#slika").fileinput({
+    allowedFileExtensions: ["jpg", "jpeg", "JPG", "JPEG", "png","PNG"],
+        uploadAsync: false,
+        uploadUrl: "/hackaton/upload.php", // your upload server url
+        uploadExtraData: function() {
+            return {
+                naslov: $("#naslov").val(),
+                opis: $("#opis").val()             
+        
+            };
+        }
+    }).on('fileuploaded', function(event, data) {
+      
+   alert("gotovo");
+});
+
+</script>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="profile(4,0);">Spremi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--gotov modal za novi problem -->

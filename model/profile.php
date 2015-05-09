@@ -24,7 +24,8 @@ class profile{
 
 	function noviPrijedlog($naslov,$opis){
 		include '../dbSettings.php';
-		$sql='insert into prijedlozi(idGradjanina,naslov,opis,aktivan) values('.mysql_real_escape_string($_SESSION["id"]).',"'.mysql_real_escape_string($naslov).'","'.mysql_real_escape_string($opis).'",1)';
+		$sql='insert into prijedlozi(idGradjanin,naslov,opis,aktivan) values('.mysql_real_escape_string($_SESSION["id"]).',"'.mysql_real_escape_string($naslov).'","'.mysql_real_escape_string($opis).'",1)';
+	
 		if(mysql_query($sql)){
 			echo 'Novi prijedlog uspješno spremljen';	
 		}else{
@@ -38,6 +39,17 @@ class profile{
 		$sql='update prijedlozi set aktivan=0 where idPrijedloga='.mysql_real_escape_string($idPrijedloga);
 		if(mysql_query($sql)){
 			echo 'Prijedlog uspješno deaktiviran';	
+		} else{
+			echo 'Došlo je do greške, molim Vas pokušajte ponovno';
+		}
+
+	}
+
+	function deaktivirajProblem($idProblem){
+		include '../dbSettings.php';
+		$sql='update problemi set aktivan=0 where idProblema='.mysql_real_escape_string($idProblem);
+		if(mysql_query($sql)){
+			echo 'Problem uspješno deaktiviran';	
 		} else{
 			echo 'Došlo je do greške, molim Vas pokušajte ponovno';
 		}

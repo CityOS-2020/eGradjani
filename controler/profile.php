@@ -11,6 +11,9 @@ if($action==1){
 }else if($action==2){
 	$return=$profile->deaktivirajPrijedlog($_POST["dodatno"]);
 	echo $return;
+}else if($action==3){
+	$return=$profile->deaktivirajProblem($_POST["dodatno"]);
+	echo $return;
 }else if($action==4){
 	$return=$profile->noviPrijedlog($_POST["naslovPrijedloga"],$_POST["opisPrijedloga"]);
 	echo $return;

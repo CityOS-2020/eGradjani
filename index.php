@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'dbSettings.php';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" class="fuelux">
@@ -10,7 +11,7 @@ session_start();
 <link href="lib/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
 <link href="css/jqueryUI/jquery-ui.css" rel="stylesheet">
 <link href="css/fuelUX/fuelux.css" rel="stylesheet">
-<link href="css/fileinput/fileinput.css" rel="stylesheet">
+<link href="lib/css/fileinput/fileinput.css" rel="stylesheet">
 <link href="css/datatables/datatables.css" rel="stylesheet">
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -20,7 +21,7 @@ session_start();
 <script src="lib/js/bootstrap/bootstrap.min.js"></script>
 <script src="js/fuelUX/fuelux.js"></script>
 <script src="js/jqueryUI/jquery-ui.min.js"></script>
-<script src="js/fileinput/fileinput.js"></script>
+<script src="lib/js/fileinput/fileinput.js"></script>
 <script src="js/datatables/datatables.js"></script>
 <script src="js/datatables/datatablesBootstrap.js"></script>
 
@@ -34,7 +35,7 @@ session_start();
     <div class="navbar-header">
       <?php
       if($_SESSION["status"]==1){
-        include 'dbSettings.php';
+        
         $sqlGradjanin='select email,ime,prezime from gradjani where idGradjani='.$_SESSION["id"];
         $resultGradjanin=mysql_query($sqlGradjanin);
         $rowGradjanin=mysql_fetch_array($resultGradjanin);
@@ -72,10 +73,57 @@ session_start();
 <div class="row">
 <div class="col-md-4 col-md-offset-2">
   <button class="btn btn-default btn-lg">Prijedlozi...</button>
+
+  <h3>Najnoviji prijedlozi..</h3>
+    <ul>
+  <?php
+    $sqlPrijedlozi='select * from prijedlozi where aktivan=1 order by idPrijedloga desc';
+    $resultPrijedlozi=mysql_query($sqlPrijedlozi);
+    while($rowPrijedlozi=mysql_fetch_array($resultPrijedlozi)){
+      ?>
+        <li><?php echo $rowPrijedlozi["naslov"].'<br/>';
+                  echo $rowPrijedlozi["opis"].'<br/>';
+                  $sqlVotes='select SUM(upVote) as up,SUM(downVote) as down from prijedloziVotes where idPrijedloga='.$rowPrijedlozi["idPrijedloga"];
+                  $resultVotes=mysql_query($sqlVotes);
+                  $rowVotes=mysql_fetch_array($resultVotes);
+
+                  ?>
+                  
+                    <a href="#" onClick="prijedlozi(1,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-info" role="button" <?php if($_SESSION["status"]!=1){ echo 'disabled';}?> ><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><?php echo $rowVotes["up"];?></a>
+                    <a href="#" onClick="prijedlozi(2,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-info" role="button" <?php if($_SESSION["status"]!=1){ echo 'disabled';}?>><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><?php echo $rowVotes["down"];?></a>       
+                  
+        </li>
+
+      <?php
+    }
+  ?>
+</ul>
 </div>
 <div class="col-md-4">
   <button class="btn btn-default btn-lg">Problemi...</button>
-  
+    <h3>Najnoviji problemi...</h3>
+    <ul>
+      <?php
+    $sqlProblemi='select * from problemi where aktivan=1 order by idProblema desc';
+    $resultProblemi=mysql_query($sqlProblemi);
+    while($rowProblemi=mysql_fetch_array($resultProblemi)){
+      
+        if($rowProblemi["status"]==1){
+          $style='class="bg-warning"';
+      }else if($rowProblemi["status"]==2){
+          $style='class="bg-info';
+      }else if($rowProblemi["status"]==3){
+          $style='class="bg-success"';
+      }?>
+        <li <?php echo $style;?>><?php echo $rowProblemi["naslov"].'<br/>';
+                  echo $rowProblemi["opis"].'<br/>';
+            ?>   
+        </li>
+
+      <?php
+    }
+  ?>
+    </ul>
 </div>
 </div>
 <!-- end of content -->
