@@ -6,7 +6,7 @@ session_start();
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Hackaton</title>
-<link href="lib/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link href="lib/css/bootstrap/bootstrap.css" rel="stylesheet">
 <link href="lib/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
 <link href="css/jqueryUI/jquery-ui.css" rel="stylesheet">
 <link href="css/fuelUX/fuelux.css" rel="stylesheet">
@@ -40,26 +40,16 @@ session_start();
         $rowGradjanin=mysql_fetch_array($resultGradjanin);
         
         ?>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li class="dropdown active">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" ><?php echo $rowGradjanin["ime"].' '.$rowGradjanin["prezime"];?> <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#" onClick="loadScreen('profile',0);">Profil</a></li>
-                <li><a href="#" onClick="logout();">Odjavi se</a></li>
-               
-                
-              </ul>
-            </li>
-          </ul>
+        <a href="http://klikinformacijsketehnologije.hr/hackaton/index.php" class="btn btn-info" role="button"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+        <a href="#" onClick="loadScreen('profile',0);" class="btn btn-info" role="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><?php echo $rowGradjanin["ime"].' '.$rowGradjanin["prezime"];?></a></li>
+        <a href="#" onClick="logout();" class="btn btn-info" role="button">Odjavi se</a>               
         
         <?php
       }else{
         ?>
       <form class="navbar-form navbar-right" role="search" id="login">
       <div class="form-group">
-          
+          <a href="http://klikinformacijsketehnologije.hr/hackaton/index.php" class="btn btn-info" role="button"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
           <input type="text" class="form-control" id="username" name="username" placeholder="E-mail">
         </div>
         <div class="form-group">
@@ -74,12 +64,20 @@ session_start();
     </div>
   </div>
 </nav>
-<div id="main" class="container-fluid" style="padding-top:150px;">
+<div id="main" class="container-fluid" style="padding-top:100px;">
 <div class="row">
 <div id="content" class="col-md-12">
 <!--start content -->
 
-
+<div class="row">
+<div class="col-md-4 col-md-offset-2">
+  <button class="btn btn-default btn-lg">Prijedlozi...</button>
+</div>
+<div class="col-md-4">
+  <button class="btn btn-default btn-lg">Problemi...</button>
+  
+</div>
+</div>
 <!-- end of content -->
 </div>
 <!-- Modal za novi izlet -->
