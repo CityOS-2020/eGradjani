@@ -157,11 +157,11 @@ include '../../dbSettings.php';
                 <div class="col-md-12">
                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#noviProblemModal">Novi problem</button><!-- Single button -->
                         <div class="btn-group">
-                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                            Action <span class="caret"></span>
+                          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            Novi zahtjevi <span class="caret"></span>
                           </button>
                           <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Besplatni WiFi</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#noviZahtjevWifiModal">Besplatni WiFi</a></li>
                             <li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
                             <li class="divider"></li>
@@ -172,38 +172,46 @@ include '../../dbSettings.php';
               </div>
           <table class="table table-striped" id="neaktvniAgenti" style="padding-top:20px;">
           <thead>
-                  <tr><td>Naslov</td><td>Opis</td><td>Slika</td><td>Status</td><td>Radnje</td></tr>
+                  <tr><td>Naslov</td><td>Datum/Vrijeme</td><td>Status</td><td>Posljednja izmjena</td><td>Odgovor</td><td>Radnje</td></tr>
                 </thead>
                 <tbody>
                  <?php
-                 $sqlProblemi='select * from problemi where aktivan=1 and idGradjanina='.$_SESSION["id"];
-                 $resultProblemi=mysql_query($sqlProblemi);
+                 $sqlZahtjevi='select z.*,t.naziv as nazivZahtjeva from zahtjevi z 
+                 inner join tipZahtjeva t on t.idTipZahtjeva=z.idTipZahtjeva 
+                 where z.aktivan=1 and z.idGradjanina='.$_SESSION["id"];
+                 $resultZahtjevi=mysql_query($sqlZahtjevi);
+                 while($rowZahtjevi=mysql_fetch_array($resultZahtjevi)){
                 
-                 while($rowProblemi=mysql_fetch_array($resultProblemi)){
                   ?>
-                    <tr><td><?php echo $rowProblemi["naslov"];?></td>
-                        <td><?php echo $rowProblemi["opis"];?></td>
-                        <td><img height="150" width="150" src="<?php echo $rowProblemi["slika"];?>" /></td>
-                        <td>
+                    <td><?php echo $rowZahtjevi["nazivZahtjeva"];?></td>
+                    <td><?php echo $rowZahtjevi["timestampPredano"];?></td>
+                    <td>
                         <?php
-                        if($rowProblemi["status"]==1){
-                          echo 'Novi';
-                        }else if($rowProblemi["status"]==2){
-                          echo 'Zaprimljen';
-                        }else if($rowProblemi["status"]==3){
-                          echo 'Rješeno';                
+                            if($rowZahtjevi["status"]==1){
+                                echo 'Predano';
+                            }else if($rowZahtjevi["status"]==2){
+                                echo 'Zaprimljeno';
+                            }else if($rowZahtjevi["status"]==3){
+                                echo 'Rješeno';
+                            }
+                           ?>   
+                    </td>
+                    <td>
+                       <?php
+                        if($rowZahtjevi["timestampPromjena"]!="0000-00-00 00:00:00"){
+                          echo $rowZahtjevi["timestampPromjena"];
                         }
-                        ?>
-                        </td>
-                        <td><?php if($rowProblemi["aktivan"]==1){?>
-                                <a href="#" onClick="profile(3,<?php echo $rowProblemi["idProblema"];?>);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>Deaktiviraj</a><br/> 
+                        ?> 
+                    </td>
+                    <td></td>
+                    <td><?php if($rowZahtjevi["aktivan"]==1){?>
+                                <a href="#" onClick="zahtjevi(2,<?php echo $rowZahtjevi["z.idZahtjeva"];?>);"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>Deaktiviraj</a><br/> 
                                 <?php }
                                 ?>
                         </td>
-                       </tr> 
-
+                       </tr>
                   <?php
-                 }
+                 } 
                  ?>
                 </tbody>  
       </table>
@@ -314,3 +322,33 @@ $('#myTab a').click(function (e) {
 </div>
 
 <!--gotov modal za novi problem -->
+
+<!-- modal za novi zahtjev za besplatni internet -->
+<!-- Modal -->
+<div class="modal fade" id="noviZahtjevWifiModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Zahtjev za besplatni internet</h4>
+      </div>
+      <div class="modal-body">
+        
+           <p>Svaki stanovnik Dubrovnika može na mrežu prijaviti dva uređaja koja će spajati na mrežu bežičnog interneta pomoću MAC-broja svog mobitela, tableta ili računala.
+Kako biste dobili lozinku za korištenje ove pogodnosti uz osobnu iskaznicu obavezno pripremite i MAC broj jednog ili dva uređaja. Uz lozinku, dobit ćete i brošuru s uputama za korištenje.</p>
+        <form role="form" id="noviZahtjevWifi">
+              <div class="form-group">
+                 <input type="text" class="form-control" id="mac" name="mac" placeholder="MAC adresa" >
+              </div> 
+                  
+        </form>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onClick="zahtjevi(1,1);">Spremi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--gotov modal za novi prijedlogbesplatni internet -->

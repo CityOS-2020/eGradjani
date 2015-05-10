@@ -25,12 +25,10 @@
 </head>
 
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="height:100px !important;">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
 <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="http://www.vacation-rental-croatia.com/" target="_BLANK">
-       LOGO
-      </a>
+      <img src="../josipStrevun-bijeli.png" width="200" height="40"/>
     </div>
   </div>
 </nav>

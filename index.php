@@ -32,7 +32,11 @@ include 'dbSettings.php';
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
 <div class="container-fluid">
-    <div class="navbar-header">
+  <div class="navbar-header navbar-left">
+         <a href="http://klikinformacijsketehnologije.hr/hackaton/index.php"  ><img src="josipStrevun-bijeli.png" width="200" height="40"/></a>
+   
+  </div>
+    <div class="navbar-header navbar-right">
       <?php
       if($_SESSION["status"]==1){
         
@@ -41,16 +45,16 @@ include 'dbSettings.php';
         $rowGradjanin=mysql_fetch_array($resultGradjanin);
         
         ?>
-        <a href="http://klikinformacijsketehnologije.hr/hackaton/index.php" class="btn btn-info" role="button"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
-        <a href="#" onClick="loadScreen('profile',0);" class="btn btn-info" role="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><?php echo $rowGradjanin["ime"].' '.$rowGradjanin["prezime"];?></a></li>
-        <a href="#" onClick="logout();" class="btn btn-info" role="button">Odjavi se</a>               
+        
+        <a href="#" onClick="loadScreen('profile',0);" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><?php echo $rowGradjanin["ime"].' '.$rowGradjanin["prezime"];?></a></li>
+        <a href="#" onClick="logout();" class="btn btn-primary" role="button">Odjavi se</a>               
         
         <?php
       }else{
         ?>
-      <form class="navbar-form navbar-right" role="search" id="login">
+      <form class="navbar-form" role="search" id="login">
       <div class="form-group">
-          <a href="http://klikinformacijsketehnologije.hr/hackaton/index.php" class="btn btn-info" role="button"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+          
           <input type="text" class="form-control" id="username" name="username" placeholder="E-mail">
         </div>
         <div class="form-group">
@@ -69,28 +73,44 @@ include 'dbSettings.php';
 <div class="row">
 <div id="content" class="col-md-12">
 <!--start content -->
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+ 
+</div>
+</div>
 
 <div class="row">
-<div class="col-md-4 col-md-offset-2">
-  <button class="btn btn-default btn-lg">Prijedlozi...</button>
+<div class="col-md-6 col-md-offset-3">
+  <div class="jumbotron">
+  <div class="container">
+  
 
-  <h3>Najnoviji prijedlozi..</h3>
+  <h2>Najnoviji prijedlozi..</h2>
     <ul>
   <?php
     $sqlPrijedlozi='select * from prijedlozi where aktivan=1 order by idPrijedloga desc';
     $resultPrijedlozi=mysql_query($sqlPrijedlozi);
     while($rowPrijedlozi=mysql_fetch_array($resultPrijedlozi)){
       ?>
-        <li><?php echo $rowPrijedlozi["naslov"].'<br/>';
-                  echo $rowPrijedlozi["opis"].'<br/>';
+        <li><?php echo '<h3>'.$rowPrijedlozi["naslov"].'</h3>';
+                  echo '<p>'.$rowPrijedlozi["opis"].'</p>';
                   $sqlVotes='select SUM(upVote) as up,SUM(downVote) as down from prijedloziVotes where idPrijedloga='.$rowPrijedlozi["idPrijedloga"];
                   $resultVotes=mysql_query($sqlVotes);
                   $rowVotes=mysql_fetch_array($resultVotes);
 
+                  $sqlCheckVote='select count(idVotes) as votes from prijedloziVotes where idGradjanina='.$_SESSION["id"].' and idPrijedloga='.$rowPrijedlozi["idPrijedloga"];
+                  $resultCheckVote=mysql_query($sqlCheckVote);
+                  $rowCheckVote=mysql_fetch_array($resultCheckVote);
+                  if($rowCheckVote["votes"]>0){
+                    $checkVote=1;
+                  }else{
+                    $checkVote=0;
+                  }
+
                   ?>
                   
-                    <a href="#" onClick="prijedlozi(1,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-info" role="button" <?php if($_SESSION["status"]!=1){ echo 'disabled';}?> ><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><?php echo $rowVotes["up"];?></a>
-                    <a href="#" onClick="prijedlozi(2,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-info" role="button" <?php if($_SESSION["status"]!=1){ echo 'disabled';}?>><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><?php echo $rowVotes["down"];?></a>       
+                    <a href="#" onClick="prijedlozi(1,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-primary" role="button" <?php if($_SESSION["status"]!=1 || $checkVote==1){ echo 'disabled';}?> ><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><?php echo $rowVotes["up"];?></a>
+                    <a href="#" onClick="prijedlozi(2,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-primary" role="button" <?php if($_SESSION["status"]!=1 || $checkVote==1){ echo 'disabled';}?>><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><?php echo $rowVotes["down"];?></a>       
                   
         </li>
 
@@ -98,9 +118,20 @@ include 'dbSettings.php';
     }
   ?>
 </ul>
+<button class="btn btn-primary btn-lg">Pregledaj sve prijedloge</button>
 </div>
-<div class="col-md-4">
-  <button class="btn btn-default btn-lg">Problemi...</button>
+</div>
+</div>
+
+
+</div >
+
+
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+  <div class="jumbotron">
+  <div class="container">
+  
     <h3>Najnoviji problemi...</h3>
     <ul>
       <?php
@@ -124,7 +155,11 @@ include 'dbSettings.php';
     }
   ?>
     </ul>
+    <button class="btn btn-primary btn-lg">Pregledaj sve problem</button>
 </div>
+</div>
+</div>
+
 </div>
 <!-- end of content -->
 </div>
@@ -148,7 +183,7 @@ include 'dbSettings.php';
                     <input type="text" class="form-control" id="regIme" name="regIme" placeholder="Ime">
                </div>
                <div class="form-group">
-                    <input type="text" class="form-control" id="regPrezime" name="regPrezime" placeholder="Ime">
+                    <input type="text" class="form-control" id="regPrezime" name="regPrezime" placeholder="Prezime">
                </div>    
         </form>
       </div>
