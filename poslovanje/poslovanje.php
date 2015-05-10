@@ -43,8 +43,9 @@ header("Location: index.php");
 <div class="row">
 <div id="menu" class="col-md-2">
 <ul class="list-group">
- 	 <li class="list-group-item"><a href="biz.php" >Naslovnica</a></li>
-
+ 	 <li class="list-group-item"><a href="poslovanje.php" >Naslovnica</a></li>
+ 	 <li class="list-group-item"><a href="#" onClick="loadScreen('problemi',0);">Problemi</a></li>
+ 	 <li class="list-group-item"><a href="#" onClick="loadScreen('zahtjevi',0);">Zahtjevi</a></li>
   	<li class="list-group-item"><a href="#" onclick="logout();" >Odjavi se</a></li>
 </ul>
 </div>

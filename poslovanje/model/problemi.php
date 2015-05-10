@@ -5,6 +5,7 @@ class problemi{
 	function zaprimiProblem($idProblema){
 		include '../dbSettings.php';
 		$sql='update problemi set status=2 where idProblema='.$idProblema;
+		
 		if(mysql_query($sql)){
 			echo 'Problem zaprimljen';
 		}else{

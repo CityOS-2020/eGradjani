@@ -85,15 +85,15 @@ include 'dbSettings.php';
   <div class="container">
   
 
-  <h2>Najnoviji prijedlozi..</h2>
-    <ul>
+  <h3>Najnoviji prijedlozi..</h3>
+    <ul style="list-style-type: none;">
   <?php
     $sqlPrijedlozi='select * from prijedlozi where aktivan=1 order by idPrijedloga desc';
     $resultPrijedlozi=mysql_query($sqlPrijedlozi);
     while($rowPrijedlozi=mysql_fetch_array($resultPrijedlozi)){
       ?>
-        <li><?php echo '<h3>'.$rowPrijedlozi["naslov"].'</h3>';
-                  echo '<p>'.$rowPrijedlozi["opis"].'</p>';
+        <li><div class="alert alert-info" role="alert"><?php echo '<h4>'.$rowPrijedlozi["naslov"].'</h4>';
+                  echo ''.$rowPrijedlozi["opis"].'';
                   $sqlVotes='select SUM(upVote) as up,SUM(downVote) as down from prijedloziVotes where idPrijedloga='.$rowPrijedlozi["idPrijedloga"];
                   $resultVotes=mysql_query($sqlVotes);
                   $rowVotes=mysql_fetch_array($resultVotes);
@@ -108,17 +108,20 @@ include 'dbSettings.php';
                   }
 
                   ?>
+
+                    <br/>
+                    <a href="#" onClick="prijedlozi(1,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-primary btn-sm" role="button" <?php if($_SESSION["status"]!=1 || $checkVote==1){ echo 'disabled';}?> ><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><?php echo $rowVotes["up"];?></a>
+                    <a href="#" onClick="prijedlozi(2,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-primary btn-sm" role="button" <?php if($_SESSION["status"]!=1 || $checkVote==1){ echo 'disabled';}?>><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><?php echo $rowVotes["down"];?></a>       
                   
-                    <a href="#" onClick="prijedlozi(1,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-primary" role="button" <?php if($_SESSION["status"]!=1 || $checkVote==1){ echo 'disabled';}?> ><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span><?php echo $rowVotes["up"];?></a>
-                    <a href="#" onClick="prijedlozi(2,<?php echo $rowPrijedlozi["idPrijedloga"];?>);" class="btn btn-primary" role="button" <?php if($_SESSION["status"]!=1 || $checkVote==1){ echo 'disabled';}?>><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span><?php echo $rowVotes["down"];?></a>       
-                  
+        
         </li>
+          <hr> 
 
       <?php
     }
   ?>
 </ul>
-<button class="btn btn-primary btn-lg">Pregledaj sve prijedloge</button>
+<div class="text-right"><button class="btn btn-primary btn-lg">Pregledaj sve prijedloge</button></div>
 </div>
 </div>
 </div>
@@ -133,29 +136,29 @@ include 'dbSettings.php';
   <div class="container">
   
     <h3>Najnoviji problemi...</h3>
-    <ul>
+    <ul style="list-style-type: none;">
       <?php
     $sqlProblemi='select * from problemi where aktivan=1 order by idProblema desc';
     $resultProblemi=mysql_query($sqlProblemi);
     while($rowProblemi=mysql_fetch_array($resultProblemi)){
       
         if($rowProblemi["status"]==1){
-          $style='class="bg-warning"';
+          $style='class="alert alert-danger"';
       }else if($rowProblemi["status"]==2){
-          $style='class="bg-info';
+          $style='class="alert alert-info';
       }else if($rowProblemi["status"]==3){
-          $style='class="bg-success"';
+          $style='class="alert alert-success"';
       }?>
-        <li <?php echo $style;?>><?php echo $rowProblemi["naslov"].'<br/>';
-                  echo $rowProblemi["opis"].'<br/>';
-            ?>   
+        <li><div <?php echo $style;?> role="alert"><?php echo $rowProblemi["naslov"].'<br/>';
+                  echo $rowProblemi["opis"].'';
+            ?>  </div> 
         </li>
 
       <?php
     }
   ?>
     </ul>
-    <button class="btn btn-primary btn-lg">Pregledaj sve problem</button>
+    <div class="text-right"><button class="btn btn-primary btn-lg">Pregledaj sve probleme</button></div>
 </div>
 </div>
 </div>
